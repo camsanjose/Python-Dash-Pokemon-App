@@ -19,24 +19,32 @@ import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import base64
 
 
 app = dash.Dash(__name__)
 server = app.server
+image_filename  = 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1200px-International_Pok%C3%A9mon_logo.svg.png)'
+encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
-
-app.layout = html.Div([
-    html.H2('Pokemon',style={
-            'textAlig':"center",
-            'color': 'lightblue'
-            }),
+app.layout = html.Div(
+    html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode())),
+    html.Div(children=['''
+        Hello! Welcome to the Dash Pokemon app.  
+        This will help you to get to know in-depth all pokemon in hopes you can 
+        choose which one is best for you.
+    ''']),
+    html.Div(children=['''
+        There are three types of main characteristics
+        in all Pokemon: stamina, defense, and attack. 
+    ''']),
     dcc.Dropdown(
         id='dropdown',
         options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
         value='LA'
     ),
     html.Div(id='display-value')
-])
+)
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
