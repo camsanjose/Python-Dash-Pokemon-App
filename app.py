@@ -49,8 +49,13 @@ children=[
                 ),
     dash_table.DataTable(
         id='table-container', 
-        columns=[{'id': c, 'name': c} for c in df.columns.values])
-        ])
+        columns=[{'name': i, 'id': i, 'deletable': True} for i in df.columns]
+        )
+        ]),
+    html.Div(children=['''
+    Now that we have chosen our Pokemon to analyze more in-depth, we can now see how it compares
+    with other Pokemon.  
+    '''])
 ])
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
@@ -62,39 +67,28 @@ app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"
 def display_table(states):
     dff = df[df['Name']==states]
     return dff.to_dict('records')
-def update_output_graph(data, states):
+
+def update_Pgraph(data, input_value):
     if data is None:
         return {}, {}
     df.to_dict('records')
     return  {
                 'data': [
-                    go.Scatter(
-                        x=df[df['Name'] == i]['Total','Attack', 'Defense', 'Speed'] if i in states else [],
-                        y=df[df['Name'] == i]['Name'] if i in states else [],
-                        text=df[df['Name'] == i]['Name'],
+                    go.Bar(
+                        x=df[df['Name'] == i]['Total'] if i in input_value else [],
+                        y=df[df['Name'] == i]['Name'] if i in input_value else [],
                         mode='markers',
-                        opacity=0.7,
-                        marker={
-                            'size': 15,
-                            'line': {'width': 0.5, 'color': 'white'}
-                        },
-                        name=i
-                    ) for i in states
+                        marker={'size':15,
+                                      'opacity':0.5,
+                                      'line':{'width':0.5,'color':'green'}
+                                }, name= i
+                    ) for i in input_value
                 ],
                 'layout': go.Layout(
                     xaxis={'type': 'log', 'title': 'Total level'},
                     yaxis={'title': 'Total level'},
-                    margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                    legend={'x': 0, 'y': 1},
-                    hovermode='closest',
-                    dragmode='lasso'
-                )
-            },{
-                'data': [ go.Box(
-                            y= df[df['Name'] == i]['Total'],
-                            name= i
-                        ) if i in states else {}
-                          for i in states ]
+                    hovermode='closest'
+                ),
             }
 
 
