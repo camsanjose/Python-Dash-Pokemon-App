@@ -19,7 +19,7 @@ df['id'] = df['Name']
 df_type = df['Type 1'].dropna().sort_values().unique()
 df.set_index('id', inplace=True, drop=False)
 df_col= ['Total', 'Attack','Defense', 'Speed']
-
+dfm= pd.melt(df, id_vars =['Name','Type 1'], value_vars =['Total', 'Attack','Defense', 'Speed'])
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -119,11 +119,11 @@ app.layout = html.Div([
             ),
         dcc.RadioItems(
                 id='variable',
-                #crossfilter-yaxis-type
                 options=[{'label': i, 'value': i} for i in df_col],
                 value='Total',
                 labelStyle={'display': 'inline-block'}
-            )
+            ),
+        dcc.Graph(id='type-graph')
     ]
     )]
 )])
@@ -186,13 +186,36 @@ def update_graphs(row_ids, selected_row_ids, active_cell):
         for column in ["Total","Attack","Defense", "Speed"] if column in dff
     ]
 
-#@app.callback(
-#    dash.dependencies.Output('crossfilter-indicator-scatter', 'figure'),
-#    [dash.dependencies.Input('crossfilter-column', 'value')])
+@app.callback(
+    dash.dependencies.Output('type-graph', 'figure'),
+    [dash.dependencies.Input('type-of-pokemon', 'value'),
+    dash.dependencies.Input('variable', 'value')])
 
-#def update_graph(column_name, value):
-#    dff = df[df['Year'] == value]
-#    return dff.to_dict('records')
+def update_hist_graph(column_name, variable):
+    dff = dfm[dfm['Type 1'] == column_name]
+    return {
+        'data': [dict(
+            #x=dff.index,
+            x=dff[dff['variable'] == variable]['value'],
+            #text=dff[dff['variable'] == column_name]['Name'],
+            customdata=dff[dff['variable'] == variable]['value'],
+            mode='markers',
+            marker={
+                'size': 15,
+                'opacity': 0.5,
+                'line': {'width': 0.5, 'color': 'white'}
+            }
+        )],
+        'layout': dict(
+            xaxis={
+                'title': variable
+            },
+            yaxis={
+                'title': 'frequency'
+            },
+            margin={'l': 40, 'b': 30, 't': 10, 'r': 0},
+        )
+    }
 
 if __name__ == '__main__':
     app.run_server(debug=True)
