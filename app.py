@@ -18,6 +18,7 @@ states = df['Name'].unique().tolist()
 df['id'] = df['Name']
 df_type = df['Type 1'].dropna().sort_values().unique()
 df.set_index('id', inplace=True, drop=False)
+df_col= ['Total', 'Attack','Defense', 'Speed']
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -28,8 +29,9 @@ app.title= "My Pokemon Dash App"
 app.layout = html.Div([
     dcc.Tabs([
         dcc.Tab(label='About', 
-        style= {'background-image': 'url(https://paulsolarz.weebly.com/uploads/8/3/0/8/8308546/pikachu-hi-pokemon_orig.jpg)',
-               'background-size': '150px 100px'},
+        style= {'font-weight': 'bold',
+                'background-image': 'url(https://i1.wp.com/republica.gt/wp-content/uploads/2017/10/pikachu.jpg?fit=1600%2C1436&ssl=1)',
+                'background-size': '150px 100px'},
         children= [
     html.Div(children=['''
     Hello! Welcome to the Dash Pokemon app.
@@ -55,20 +57,26 @@ app.layout = html.Div([
         data= df.to_dict('records'),
         columns=[{'name': i, 'id': i, 'deletable': True} for i in df.columns
         if i != 'id'
-        ])
+        ]),
+    html.Div(children=['''
+        Click on the tabs at the top of the page to see other cool features!  
+        ''']),
     ])]),
-    dcc.Tab(label='Pokemon',
-    style= {'background-image': 'url(https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/5b0fcfa25bafe83df2c203b3/pokemon0_0.jpg)',
+    dcc.Tab(label='Data',
+    style= {'font-weight': 'bold',
+            'background-image': 'url(https://i.redd.it/6to6dwa8v5241.jpg)',
             'background-size': '150px'},
     children= [
         html.Div(children=['''
-        If you want to see how the Pokemon you choose compares to others, you can do so with 
-        the table and graphs below. The data is predetermined to be in alphabetical order. 
+        If you want to see how the Pokemon of your choice compares to others, you can do so with 
+        the table and graphs below. When choosing any Pokemon in the table below, this will show 
+        up in the graphs underneath with the color pink. 
         ''']),
         html.Div(children=['''
-        However, if you want to see how it compares in lets say its Total points, click on the Pokemon you want (the box on your left) 
+        The data is predetermined to be in alphabetical order. However, if you want to see how it compares to,
+        lets say its Total points, click on the Pokemon you want (the box on your left) 
         and then click on the arrows next to the column header (in this case, Total). This way, 
-        you can see where it stands in comparison to other Pokemon.      
+        you can see where it stands in comparison to other Pokemon in the graphs underneath.      
         ''']),
         dash_table.DataTable(
             id='datatable',
@@ -93,7 +101,31 @@ app.layout = html.Div([
         accounting for its Total points, as well as the attack, defense and speed levels.  
         ''']),
         html.Div(id='datatable-row-ids-container')
-    ])]
+    ]), 
+    dcc.Tab(label='Characteristic',
+    style= {'font-weight': 'bold',
+            'background-image': 'url(https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/5b0fcfa25bafe83df2c203b3/pokemon0_0.jpg)',
+            'background-size': '150px'},
+    children= [
+        html.Div(children=['''
+        In this section we will see global variables, were we will see the characteristics of the 
+        Total points, the Attack levels, the Defense levels, the Speed levels, and see what type of 
+        Pokemon is the most common or uncommon.  
+        ''']), 
+        dcc.Dropdown(
+                id='type-of-pokemon',
+                options=[{'label': i, 'value': i} for i in df_type],
+                value='Water'
+            ),
+        dcc.RadioItems(
+                id='variable',
+                #crossfilter-yaxis-type
+                options=[{'label': i, 'value': i} for i in df_col],
+                value='Total',
+                labelStyle={'display': 'inline-block'}
+            )
+    ]
+    )]
 )])
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
@@ -154,6 +186,13 @@ def update_graphs(row_ids, selected_row_ids, active_cell):
         for column in ["Total","Attack","Defense", "Speed"] if column in dff
     ]
 
+#@app.callback(
+#    dash.dependencies.Output('crossfilter-indicator-scatter', 'figure'),
+#    [dash.dependencies.Input('crossfilter-column', 'value')])
+
+#def update_graph(column_name, value):
+#    dff = df[df['Year'] == value]
+#    return dff.to_dict('records')
 
 if __name__ == '__main__':
     app.run_server(debug=True)
