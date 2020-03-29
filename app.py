@@ -41,9 +41,10 @@ app.layout = html.Div([
     choose which one is best for you.  
     ''']),
         html.Div(children=['''
-    In this section, you will get the chance to choose your own Pokemon and find out its Type, its total
+    There are three sections in this app ('About', 'Data' and 'Characteristic' shown at the top of the page).
+    You are in the 'About' section. In this section, you will get the chance to choose your own Pokemon and find out its Type, its total
     amount of points, and the level of Attack, Defense and Speed. There are many pokemon to choose from, 
-    so pick wisely. A random Pokemon is chosen but please choose whatever Pokemon you want. 
+    so pick wisely.
     ''']),
     html.Div(
         children=[
@@ -58,7 +59,8 @@ app.layout = html.Div([
         columns=[{'name': i, 'id': i, 'deletable': True} for i in df.columns
         if i != 'id'
         ]),
-    html.Div(children=['''
+    html.Div(style= {'color' : 'blue'},
+    children=['''
         Click on the tabs at the top of the page to see other cool features!  
         ''']),
     ])]),
@@ -68,7 +70,7 @@ app.layout = html.Div([
             'background-size': '150px'},
     children= [
         html.Div(children=['''
-        If you want to see how the Pokemon of your choice compares to others, you can do so with 
+        This section will help you see how the Pokemon of your choice compares to others with 
         the table and graphs below. When choosing any Pokemon in the table below, this will show 
         up in the graphs underneath with the color pink. 
         ''']),
@@ -96,9 +98,9 @@ app.layout = html.Div([
             page_size= 10,
         ),
         html.Div(children=['''
-        Here we can visually see how they are in comparison to the other Pokemon. The Pokemon 
+        The following graphs are to help you to visually see how the Pokemon you chose compare to the other Pokemon. The Pokemon 
         you choose will change to the color pink in all of the graphs. There are four graphs, 
-        accounting for its Total points, as well as the attack, defense and speed levels.  
+        accounting for the Total points, as well as the attack, defense and speed levels.  
         ''']),
         html.Div(id='datatable-row-ids-container')
     ]), 
@@ -108,10 +110,18 @@ app.layout = html.Div([
             'background-size': '150px'},
     children= [
         html.Div(children=['''
-        In this section we will see global variables, were we will see the characteristics of the 
-        Total points, the Attack levels, the Defense levels, the Speed levels, and see what type of 
-        Pokemon is the most common or uncommon.  
+        In this section you can choose from different types of Pokemon.There are 18 types: Bug, Dark, Dragon, 
+        Electric, Fairy, Fighting, Fire, Flying, Ghost, Grass, Ground, Ice, Normal, Poison, Psychich, Rock, Steel and Water. 
+        Choose whichever you like to view!  
         ''']), 
+        html.Div(children=['''
+        Likewise, you can also choose what levels you would like to see for each of the type of Pokemon. 
+        You can choose from: Total points, the Attack levels, the Defense levels,and the Speed levels.  
+        This will be shown in the graph below, were you have the Pokemon of the chosen type, with its own level. 
+        ''']),
+        html.Div(children=['''
+        It is an interactive plot, so you can put the mouse on top of each point and can see to which Pokemon it belongs to. 
+        ''']),
         dcc.Dropdown(
                 id='type-of-pokemon',
                 options=[{'label': i, 'value': i} for i in df_type],
@@ -123,7 +133,10 @@ app.layout = html.Div([
                 value='Total',
                 labelStyle={'display': 'inline-block'}
             ),
-        dcc.Graph(id='type-graph')
+        dcc.Graph(id='type-graph'),
+        html.Div(children=['''
+        I hope you enjoyed this app! Thank you for using this tool and we will hopefully see you another time!   
+        '''])
     ]
     )]
 )])
@@ -202,7 +215,8 @@ def update_hist_graph(column_name, variable):
             marker={
                 'size': 15,
                 'opacity': 0.5,
-                'line': {'width': 0.5, 'color': 'white'}
+                'line': {'width': 0.5, 'color': 'white'},
+                'color': 'tomato'
             }
         )],
         'layout': dict(
