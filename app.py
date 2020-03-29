@@ -195,10 +195,9 @@ def update_hist_graph(column_name, variable):
     dff = dfm[dfm['Type 1'] == column_name]
     return {
         'data': [dict(
-            #x=dff.index,
-            x=dff[dff['variable'] == variable]['value'],
-            #text=dff[dff['variable'] == column_name]['Name'],
-            customdata=dff[dff['variable'] == variable]['value'],
+            y=dff[dff['variable'] == variable]['value'],
+            x=dff[dff['variable'] == variable]['Name'],
+            customdata=dff[dff['variable'] == variable]['Name'],
             mode='markers',
             marker={
                 'size': 15,
@@ -208,11 +207,10 @@ def update_hist_graph(column_name, variable):
         )],
         'layout': dict(
             xaxis={
-                'title': variable
+                'title': 'Name'
             },
             yaxis={
-                'title': 'frequency'
-            },
+                'title': variable            },
             margin={'l': 40, 'b': 30, 't': 10, 'r': 0},
         )
     }
