@@ -1,16 +1,16 @@
-# Dash-Plotly
+# Dash Pokemon App
 Master Title: Statistics for Data Science
 
 Course Title: Data Tidying and Reporting 
 
 Year: 2020
 
-Student Name: Camila San José
+Student Name: Camila San JosÃ©
 
 Github repository url: https://github.com/camsanjose/Dash-Plotly
 
 
-This app contains the Pokemon dataset which includes about 676 Pokemon with its Type, Total points, Attack, Defense and Speed. You can find three tabs (sections): About, Data and Characteristics. 
+This app contains the Pokemon dataset which includes about 676 Pokemon with its Type, Total points, Attack, Defense and Speed. You can find three tabs (sections): About, Data and Characteristics. It was created with the tool Visual Studio. 
 
 In the 'About' section, you can find a small introduction to the app. Likewise, there is an interactive table where, with a dropdown, you an choose from any Pokemon you want to see all its characteristics (mentioned previously). 
 
